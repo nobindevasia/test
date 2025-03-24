@@ -1,0 +1,216 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.ML;
+using Microsoft.ML.Data;
+using D2G.Iris.ML.Core.Enums;
+using D2G.Iris.ML.Core.Interfaces;
+using D2G.Iris.ML.Core.Models;
+
+namespace D2G.Iris.ML.Utils
+{
+    public static class ModelHelper
+    {
+        public static async Task CreateModelInfo<TMetrics, TScore>(
+            TMetrics metrics,
+            IDataView dataView,
+            string[] featureNames,
+            ModelConfig config,
+            ProcessedData processedData)
+        {
+            try
+            {
+               
+                var modelInfo = new Dictionary<string, object>
+                {
+                    ["ModelName"] = $"{config.ModelType}_{config.TrainingParameters.Algorithm}",
+                    ["Author"] = config.Author,
+                    ["Description"] = config.Description,
+                    ["CreatedDate"] = DateTime.Now,
+                    ["ModelType"] = config.ModelType.ToString(),
+                    ["Algorithm"] = config.TrainingParameters.Algorithm,
+                    ["AlgorithmParameters"] = config.TrainingParameters.AlgorithmParameters,
+                    ["Features"] = featureNames,
+                    ["Metrics"] = metrics,
+                    ["DataProcessing"] = new Dictionary<string, object>
+                    {
+                        ["OriginalSampleCount"] = processedData?.OriginalSampleCount ?? 0,
+                        ["BalancedSampleCount"] = processedData?.BalancedSampleCount ?? 0,
+                        ["FeatureSelectionMethod"] = processedData?.FeatureSelectionMethod.ToString() ?? "None",
+                        ["DataBalancingMethod"] = processedData?.DataBalancingMethod.ToString() ?? "None",
+                        ["FeatureSelectionReport"] = processedData?.FeatureSelectionReport ?? string.Empty
+                    }
+                };
+
+                var jsonOptions = new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                };
+
+                var infoPath = $"{config.ModelType}_{config.TrainingParameters.Algorithm}_ModelInfo.json";
+                await File.WriteAllTextAsync(infoPath, JsonSerializer.Serialize(modelInfo, jsonOptions));
+
+                Console.WriteLine($"Model info saved to {infoPath}");
+
+          
+                CreateModelInfoTxtFile(
+                    null, 
+                    new GeneralInfo
+                    {
+                        AuthorName = config.Author,
+                        Description = config.Description
+                    },
+                    new TrainingInfo
+                    {
+                        TrainerName = config.TrainingParameters.Algorithm,
+                        NumberColumns = featureNames.Length + 1,
+                        NumberRows = GetRowCount(dataView),
+                        InputColumnNames = featureNames,
+                        OutputColumnNames = new[] { "Label" }
+                    },
+                    ConvertToStandardizedMetrics(metrics, config.ModelType),
+                    config,
+                    processedData);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving model info: {ex.Message}");
+            }
+        }
+
+        private static long GetRowCount(IDataView dataView)
+        {
+            return dataView.GetRowCount() ?? 0;
+        }
+
+        private static IStandardizedBaseMetrics ConvertToStandardizedMetrics<TMetrics>(TMetrics metrics, ModelType modelType)
+        {
+            switch (modelType)
+            {
+                case ModelType.BinaryClassification:
+                    if (metrics is BinaryClassificationMetrics binaryMetrics)
+                    {
+                        return new StandardizedBinaryMetrics
+                        {
+                            Accuracy = binaryMetrics.Accuracy,
+                            AreaUnderRocCurve = binaryMetrics.AreaUnderRocCurve,
+                            PositivePrecision = binaryMetrics.PositivePrecision,
+                            PositiveRecall = binaryMetrics.PositiveRecall,
+                            F1Score = binaryMetrics.F1Score
+                        };
+                    }
+                    break;
+                case ModelType.MultiClassClassification:
+                    if (metrics is MulticlassClassificationMetrics multiclassMetrics)
+                    {
+                        return new StandardizedMulticlassMetrics
+                        {
+                            MicroAccuracy = multiclassMetrics.MicroAccuracy,
+                            MacroAccuracy = multiclassMetrics.MacroAccuracy,
+                            LogLoss = multiclassMetrics.LogLoss,
+                            LogLossReduction = multiclassMetrics.LogLossReduction
+                        };
+                    }
+                    break;
+                case ModelType.Regression:
+                    if (metrics is RegressionMetrics regressionMetrics)
+                    {
+                        return new StandardizedRegressionMetrics
+                        {
+                            RSquared = regressionMetrics.RSquared,
+                            MeanAbsoluteError = regressionMetrics.MeanAbsoluteError,
+                            MeanSquaredError = regressionMetrics.MeanSquaredError,
+                            RootMeanSquaredError = regressionMetrics.RootMeanSquaredError
+                        };
+                    }
+                    break;
+            }
+
+            return new DefaultStandardizedMetrics();
+        }
+
+        private static void CreateModelInfoTxtFile(
+            string path,
+            GeneralInfo generalInfo,
+            TrainingInfo trainingInfo,
+            IStandardizedBaseMetrics metricsInfo,
+            ModelConfig config,
+            ProcessedData processedData)
+        {
+            if (path == null)
+            {
+                path = Directory.GetCurrentDirectory();
+            }
+
+            using (StreamWriter writer = new StreamWriter(path + "\\ModelInfo.txt"))
+            {
+                writer.WriteLine($"*********** MODEL INFORMATION ***********\n");
+                writer.WriteLine($"Author name: {generalInfo.AuthorName}");
+                writer.WriteLine($"Short description: {generalInfo.Description}\n");
+                writer.WriteLine("-------------------------------------------------------");
+                writer.WriteLine("Information about training-data:\n");
+                writer.WriteLine($"Used Trainer/Algorithmn: {trainingInfo.TrainerName}");
+                writer.WriteLine("Dimensons:");
+                writer.WriteLine($"Number of columns: {trainingInfo.NumberColumns}");
+                writer.WriteLine($"Number of rows: {trainingInfo.NumberRows}\n");
+                writer.WriteLine("Input column data information:");
+                writer.WriteLine(string.Join("\n", trainingInfo.InputColumnNames));
+                writer.WriteLine("\nOutput column data information:");
+                writer.WriteLine(string.Join("\n", trainingInfo.OutputColumnNames));
+
+                if (config != null && processedData != null)
+                {
+                    writer.WriteLine("\n-------------------------------------------------------");
+                    writer.WriteLine("Data Balancing Information:");
+                    writer.WriteLine($"Method: {config.DataBalancing.Method}");
+                    writer.WriteLine($"Original Sample Count: {processedData.OriginalSampleCount}");
+                    writer.WriteLine($"Balanced Sample Count: {processedData.BalancedSampleCount}");
+                    if (config.DataBalancing.Method != DataBalanceMethod.None)
+                    {
+                        writer.WriteLine($"Undersampling Ratio: {config.DataBalancing.UndersamplingRatio:F2}");
+                        writer.WriteLine($"Minority to Majority Ratio: {config.DataBalancing.MinorityToMajorityRatio:F2}");
+                        writer.WriteLine($"K Neighbors: {config.DataBalancing.KNeighbors}");
+                    }
+
+                    writer.WriteLine("\n-------------------------------------------------------");
+                    writer.WriteLine("Feature Selection Information:");
+                    writer.WriteLine($"Method: {config.FeatureEngineering.Method}");
+
+                    writer.WriteLine("\nSelected Features:");
+                    foreach (var feature in processedData.FeatureNames)
+                    {
+                        writer.WriteLine($"  - {feature}");
+                    }
+
+                    switch (config.FeatureEngineering.Method)
+                    {
+                        case FeatureSelectionMethod.PCA:
+                            writer.WriteLine($"Number of Components: {config.FeatureEngineering.NumberOfComponents}");
+                            break;
+                        case FeatureSelectionMethod.Correlation:
+                            writer.WriteLine($"Multicollinearity Threshold: {config.FeatureEngineering.MulticollinearityThreshold:F2}");
+                            writer.WriteLine($"Max Features: {config.FeatureEngineering.MaxFeatures}");
+                            break;
+                        case FeatureSelectionMethod.Forward:
+                            writer.WriteLine($"Max Features: {config.FeatureEngineering.MaxFeatures}");
+                            writer.WriteLine($"Min Improvement: {config.FeatureEngineering.MinImprovement:F2}");
+                            break;
+                    }
+
+                    if (!string.IsNullOrEmpty(processedData.FeatureSelectionReport))
+                    {
+                        writer.WriteLine("\nFeature Selection Report:");
+                        writer.WriteLine(processedData.FeatureSelectionReport);
+                    }
+                }
+
+                writer.WriteLine("\n-------------------------------------------------------");
+                writer.WriteLine(metricsInfo.CreateStandardizedMetricsMsg());
+            }
+
+            Console.WriteLine($"Detailed model info saved to {path}\\ModelInfo.txt");
+        }
+    }
+}
