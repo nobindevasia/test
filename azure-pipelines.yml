@@ -16,7 +16,12 @@ stages:
     workspace:
       clean: all
     steps:
-
+    - task: NuGetAuthenticate@0
+      displayName: 'Authenticate NuGet'
+      
+    - checkout: self
+      submodules: true
+      persistCredentials: true
       
     - task: UseDotNet@2
       displayName: 'Setup .NET 8.0.x SDK'
