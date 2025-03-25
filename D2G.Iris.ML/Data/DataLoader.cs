@@ -69,55 +69,6 @@ namespace D2G.Iris.ML.Data
             return results;
         }
 
-        public IDataView ConvertToDataView(
-            MLContext mlContext,
-            IEnumerable<Dictionary<string, object>> data,
-            string[] features,
-            ModelType modelType,
-            string targetField)
-        {
-            switch (modelType)
-            {
-                case ModelType.BinaryClassification:
-                    var binaryRows = data.Select(dict => new BinaryRow
-                    {
-                        Features = features.Select(field =>
-                            dict[field] == null ? 0.0f : Convert.ToSingle(dict[field])).ToArray(),
-                        Label = Convert.ToBoolean(dict[targetField])
-                    }).ToList();
-
-                    var binarySchema = SchemaDefinition.Create(typeof(BinaryRow));
-                    binarySchema["Features"].ColumnType = new VectorDataViewType(NumberDataViewType.Single, features.Length);
-                    return mlContext.Data.LoadFromEnumerable(binaryRows, binarySchema);
-
-                case ModelType.MultiClassClassification:
-                    var multiRows = data.Select(dict => new MulticlassRow
-                    {
-                        Features = features.Select(field =>
-                            dict[field] == null ? 0.0f : Convert.ToSingle(dict[field])).ToArray(),
-                        Label = Convert.ToUInt32(dict[targetField])
-                    }).ToList();
-
-                    var multiSchema = SchemaDefinition.Create(typeof(MulticlassRow));
-                    multiSchema["Features"].ColumnType = new VectorDataViewType(NumberDataViewType.Single, features.Length);
-                    return mlContext.Data.LoadFromEnumerable(multiRows, multiSchema);
-
-                case ModelType.Regression:
-                    var regRows = data.Select(dict => new RegressionRow
-                    {
-                        Features = features.Select(field =>
-                            dict[field] == null ? 0.0f : Convert.ToSingle(dict[field])).ToArray(),
-                        Label = Convert.ToSingle(dict[targetField])
-                    }).ToList();
-
-                    var regSchema = SchemaDefinition.Create(typeof(RegressionRow));
-                    regSchema["Features"].ColumnType = new VectorDataViewType(NumberDataViewType.Single, features.Length);
-                    return mlContext.Data.LoadFromEnumerable(regRows, regSchema);
-
-                default:
-                    throw new ArgumentException($"Unsupported model type: {modelType}");
-            }
-        }
 
         private void ValidateLoadedData(List<Dictionary<string, object>> data, ModelType modelType)
         {

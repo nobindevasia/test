@@ -25,8 +25,7 @@ namespace D2G.Iris.ML.Data
             {
                 DataSource = dbConfig.Server,
                 InitialCatalog = dbConfig.Database,
-                UserID = dbConfig.Username,
-                Password = dbConfig.Password,
+                IntegratedSecurity = true,
                 Pooling = true,
                 TrustServerCertificate = true,
                 ConnectTimeout = 60
