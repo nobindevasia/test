@@ -15,12 +15,5 @@ namespace D2G.Iris.ML.Core.Interfaces
             ModelType modelType,
             string targetField,
             string whereSyntax = "");
-
-        //IDataView ConvertToDataView(
-        //    MLContext mlContext,
-        //    IEnumerable<Dictionary<string, object>> data,
-        //    string[] features,
-        //    ModelType modelType,
-        //    string targetField);
     }
 }
