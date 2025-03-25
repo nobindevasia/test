@@ -7,7 +7,7 @@ using D2G.Iris.ML.Core.Enums;
 using D2G.Iris.ML.Core.Interfaces;
 using D2G.Iris.ML.Core.Models;
 
-namespace MachineLearningModelTraining.Data
+namespace D2G.Iris.ML.Data
 {
     public class SqlHandler : ISqlHandler
     {

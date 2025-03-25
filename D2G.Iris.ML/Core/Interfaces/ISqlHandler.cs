@@ -6,7 +6,7 @@ namespace D2G.Iris.ML.Core.Interfaces
 {
     public interface ISqlHandler
     {
-        public void Connect(DatabaseConfig dbConfig);
+        void Connect(DatabaseConfig dbConfig);
         string GetConnectionString();
         void SaveProcessedDataToTable(
             string tableName,
