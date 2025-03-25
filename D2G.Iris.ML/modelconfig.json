@@ -10,7 +10,7 @@
       "database": "sql-iris-dev",
       "whereClause": "",
       "tableName": "ComputeData.MessageProb256_Ag408_dummy",
-      "outputTableName": "ComputeData.MessageProb256_Ag408_dummy_pr"
+      "outputTableName": "ComputeData.MessageProb256_Ag408_dummy_prr"
     },
 
     "dataBalancing": {
