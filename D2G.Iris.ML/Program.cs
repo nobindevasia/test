@@ -11,6 +11,7 @@ using D2G.Iris.ML.Utils;
 using D2G.Iris.ML.Configuration;
 using D2G.Iris.ML.Data;
 using D2G.Iris.ML.Training;
+using MachineLearningModelTraining.Data;
 
 namespace D2G.Iris.ML
 {

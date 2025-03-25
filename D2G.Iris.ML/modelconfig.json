@@ -2,14 +2,12 @@
   "modelConfig": {
     "author": "Nobin Devasia",
     "description": "Model for Agenitor 408",
-    "modelType": "Regression",
+    "modelType": "BinaryClassification",
     "targetField": "Label",
 
     "database": {
       "server": "sim-01-02",
       "database": "sql-iris-dev",
-      "username": "DataTransferUser",
-      "password": "TB1d_<{_{IyDF7q7PQ@wf)4Wa",
       "whereClause": "",
       "tableName": "ComputeData.MessageProb256_Ag408_dummy",
       "outputTableName": "ComputeData.MessageProb256_Ag408_dummy_pr"

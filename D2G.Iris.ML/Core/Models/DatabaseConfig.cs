@@ -9,5 +9,6 @@
         public string Password { get; set; }
         public string OutputTableName { get; set; }
         public string WhereClause { get; set; }
+        public bool UseIntegratedSecurity { get; set; }
     }
 }

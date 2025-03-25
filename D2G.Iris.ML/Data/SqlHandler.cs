@@ -7,7 +7,7 @@ using D2G.Iris.ML.Core.Enums;
 using D2G.Iris.ML.Core.Interfaces;
 using D2G.Iris.ML.Core.Models;
 
-namespace D2G.Iris.ML.Data
+namespace MachineLearningModelTraining.Data
 {
     public class SqlHandler : ISqlHandler
     {
@@ -25,8 +25,7 @@ namespace D2G.Iris.ML.Data
             {
                 DataSource = dbConfig.Server,
                 InitialCatalog = dbConfig.Database,
-                UserID = dbConfig.Username,
-                Password = dbConfig.Password,
+                IntegratedSecurity = true,
                 Pooling = true,
                 TrustServerCertificate = true,
                 ConnectTimeout = 60

@@ -21,8 +21,7 @@ namespace D2G.Iris.ML.Utils
             ProcessedData processedData)
         {
             try
-            {
-               
+            {             
                 var modelInfo = new Dictionary<string, object>
                 {
                     ["ModelName"] = $"{config.ModelType}_{config.TrainingParameters.Algorithm}",
@@ -53,8 +52,7 @@ namespace D2G.Iris.ML.Utils
                 await File.WriteAllTextAsync(infoPath, JsonSerializer.Serialize(modelInfo, jsonOptions));
 
                 Console.WriteLine($"Model info saved to {infoPath}");
-
-          
+        
                 CreateModelInfoTxtFile(
                     null, 
                     new GeneralInfo
