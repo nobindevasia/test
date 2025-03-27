@@ -14,7 +14,7 @@
     },
 
     "dataBalancing": {
-      "method": "Smote",
+      "method": "None",
       "executionOrder": 2,
       "kNeighbors": 1,
       "undersamplingRatio": 0.9,
@@ -22,7 +22,7 @@
     },
 
     "featureEngineering": {
-      "method": "Correlation",
+      "method": "None",
       "executionOrder": 3,
       "numberOfComponents": 4,
       "maxFeatures": 2,
@@ -31,9 +31,9 @@
     },
 
     "trainingParameters": {
-      "algorithm": "fasttree",
+      "algorithm": "fastforest",
       "algorithmParameters": {
-        "LearningRate": 0.01
+        
       },
       "testFraction": 0.2
     },
