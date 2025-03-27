@@ -28,10 +28,8 @@ namespace D2G.Iris.ML.Training
                     dict[field] == null ? 0.0f : Convert.ToSingle(dict[field])).ToArray(),
                 Label = Convert.ToBoolean(dict[targetField])
             }).ToList();
-
             var schema = SchemaDefinition.Create(typeof(BinaryRow));
             schema["Features"].ColumnType = new VectorDataViewType(NumberDataViewType.Single, featureNames.Length);
-
             return mlContext.Data.LoadFromEnumerable(rows, schema);
         }
 
@@ -44,7 +42,10 @@ namespace D2G.Iris.ML.Training
         {
             var pipeline = GetBasePipeline(mlContext);
             var trainer = _trainerFactory.GetTrainer(config.ModelType, config.TrainingParameters);
-            var trainingPipeline = pipeline.Append(trainer);
+
+            var trainingPipeline = pipeline
+                .Append(trainer)
+                .Append(mlContext.Transforms.CopyColumns("Probability", "Score"));
 
             var splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: config.TrainingParameters.TestFraction);
             Console.WriteLine($"Starting binary classification model training using {config.TrainingParameters.Algorithm}...");
@@ -53,7 +54,12 @@ namespace D2G.Iris.ML.Training
             var trainedModel = await Task.Run(() => trainingPipeline.Fit(splitData.TrainSet));
 
             // Evaluate
-            var metrics = mlContext.BinaryClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+            var metrics = mlContext.BinaryClassification.Evaluate(
+                trainedModel.Transform(splitData.TestSet),
+                labelColumnName: "Label",
+                predictedLabelColumnName: "PredictedLabel",
+                scoreColumnName: "Probability");
+
             Console.WriteLine(metrics.ConfusionMatrix.GetFormattedConfusionTable());
             ConsoleHelper.PrintBinaryClassificationMetrics(config.TrainingParameters.Algorithm, metrics);
 
@@ -62,7 +68,6 @@ namespace D2G.Iris.ML.Training
             mlContext.Model.Save(trainedModel, dataView.Schema, modelPath);
             Console.WriteLine($"Model saved to {modelPath}");
 
-        
             await ModelHelper.CreateModelInfo<BinaryClassificationMetrics, float>(
                 metrics,
                 dataView,
@@ -70,7 +75,6 @@ namespace D2G.Iris.ML.Training
                 config,
                 processedData
             );
-
             return trainedModel;
         }
 
