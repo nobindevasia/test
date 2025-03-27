@@ -14,14 +14,16 @@
     },
 
     "dataBalancing": {
-      "method": "None",
+      "method": "Smote",
+      "executionOrder": 2,
       "kNeighbors": 1,
       "undersamplingRatio": 0.9,
       "minorityToMajorityRatio": 0.1
     },
 
     "featureEngineering": {
-      "method": "None",
+      "method": "Correlation",
+      "executionOrder": 3,
       "numberOfComponents": 4,
       "maxFeatures": 2,
       "minImprovement": 0.01,

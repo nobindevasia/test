@@ -14,5 +14,7 @@ namespace D2G.Iris.ML.Core.Models
         public FeatureSelectionMethod FeatureSelectionMethod { get; set; }
         public DataBalanceMethod DataBalancingMethod { get; set; }
         public float[][] Features { get; set; }
+        public int DataBalancingExecutionOrder { get; set; }
+        public int FeatureSelectionExecutionOrder { get; set; }
     }
 }

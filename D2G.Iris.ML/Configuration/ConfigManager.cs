@@ -34,6 +34,7 @@ namespace D2G.Iris.ML.Configuration
                 var modelConfig = config["modelConfig"];
 
                 ValidateConfiguration(modelConfig);
+
                 return modelConfig;
             }
             catch (Exception ex)
