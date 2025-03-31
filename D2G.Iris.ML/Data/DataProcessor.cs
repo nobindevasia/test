@@ -42,7 +42,6 @@ namespace D2G.Iris.ML.Data
             {
                 if (config.DataBalancing.Method != DataBalanceMethod.None)
                 {
-                    Console.WriteLine($"Applying {config.DataBalancing.Method} balancing...");
                     var dataBalancerFactory = new DataBalancerFactory();
                     var dataBalancer = dataBalancerFactory.CreateBalancer(config.DataBalancing.Method);
 
@@ -126,7 +125,6 @@ namespace D2G.Iris.ML.Data
 
                 if (config.DataBalancing.Method != DataBalanceMethod.None)
                 {
-                    Console.WriteLine($"Applying {config.DataBalancing.Method} balancing...");
                     var dataBalancerFactory = new DataBalancerFactory();
                     var dataBalancer = dataBalancerFactory.CreateBalancer(config.DataBalancing.Method);
 
@@ -139,8 +137,7 @@ namespace D2G.Iris.ML.Data
 
                     Console.WriteLine($"Data balanced. New dataset size: {transformedData.Count} samples");
                 }
-
-            
+           
                 selectedFeatures = transformedData.Select(row =>
                     finalFeatureNames.Select(field =>
                         row.ContainsKey(field) ? Convert.ToSingle(row[field]) : 0.0f).ToArray()
