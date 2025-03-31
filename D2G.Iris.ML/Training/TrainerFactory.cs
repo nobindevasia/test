@@ -88,6 +88,9 @@ namespace D2G.Iris.ML.Training
                 "sdcamaximumentropy" => CreateTrainer(_mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy,
                     new SdcaMaximumEntropyMulticlassTrainer.Options(), parameters),
 
+                "sdca" => CreateTrainer(_mlContext.MulticlassClassification.Trainers.SdcaNonCalibrated,
+                    new SdcaNonCalibratedMulticlassTrainer.Options(), parameters),
+
                 "fasttree" => _mlContext.MulticlassClassification.Trainers.OneVersusAll(
                             _mlContext.BinaryClassification.Trainers.FastTree(
                             new FastTreeBinaryTrainer.Options()
@@ -123,6 +126,15 @@ namespace D2G.Iris.ML.Training
 
                 "lightgbm" => CreateTrainer(_mlContext.Regression.Trainers.LightGbm,
                     new LightGbmRegressionTrainer.Options(), parameters),
+
+                "ols" => CreateTrainer(_mlContext.Regression.Trainers.Ols,
+                    new OlsTrainer.Options(), parameters),
+
+                "onlinegradientdescent" => CreateTrainer(_mlContext.Regression.Trainers.OnlineGradientDescent,
+                    new OnlineGradientDescentTrainer.Options(), parameters),
+
+                "gam" => CreateTrainer(_mlContext.Regression.Trainers.Gam,
+                    new GamRegressionTrainer.Options(), parameters),
 
                 "sdca" => CreateTrainer(_mlContext.Regression.Trainers.Sdca,
                     new SdcaRegressionTrainer.Options(), parameters),
