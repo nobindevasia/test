@@ -124,7 +124,7 @@ namespace D2G.Iris.ML.Data
                     {
                         bulkCopy.ColumnMappings.Add(column.ToString(), column.ToString());
                     }
-
+                    
                     try
                     {
                         bulkCopy.WriteToServer(dataTable);

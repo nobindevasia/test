@@ -106,22 +106,6 @@ namespace D2G.Iris.ML.Data
             }
         }
 
-        private class BinaryRow
-        {
-            public float[] Features { get; set; }
-            public bool Label { get; set; }
-        }
-
-        private class MulticlassRow
-        {
-            public float[] Features { get; set; }
-            public uint Label { get; set; }
-        }
-
-        private class RegressionRow
-        {
-            public float[] Features { get; set; }
-            public float Label { get; set; }
-        }
+       
     }
 }
