@@ -53,11 +53,17 @@ namespace D2G.Iris.ML.Training
                 "linearSvm" => CreateTrainer(_mlContext.BinaryClassification.Trainers.LinearSvm,
                     new LinearSvmTrainer.Options(), parameters),
 
+                "ldsvm" => CreateTrainer(_mlContext.BinaryClassification.Trainers.LdSvm,
+                    new LdSvmTrainer.Options(), parameters),
+
+                "sdca" => CreateTrainer(_mlContext.BinaryClassification.Trainers.SdcaNonCalibrated,
+                    new SdcaNonCalibratedBinaryTrainer.Options(), parameters),
+
                 "sgdcalibrated" => CreateTrainer(_mlContext.BinaryClassification.Trainers.SgdCalibrated,
                     new SgdCalibratedTrainer.Options(), parameters),
 
-                //"symbolicsgdlogisticregression" => CreateTrainer(_mlContext.BinaryClassification.Trainers.SymbolicSgdLogisticRegressionBinaryTrainer,
-                //    new SymbolicSgdLogisticRegressionBinaryTrain.Options(), parameters),
+                "symbolicsgdlogisticregression" => CreateTrainer(_mlContext.BinaryClassification.Trainers.SymbolicSgdLogisticRegression,
+                    new SymbolicSgdLogisticRegressionBinaryTrainer.Options(), parameters),
 
                 "gam" => CreateTrainer(_mlContext.BinaryClassification.Trainers.Gam,
                     new GamBinaryTrainer.Options(), parameters),
