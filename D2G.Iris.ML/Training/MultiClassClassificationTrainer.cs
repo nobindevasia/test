@@ -58,13 +58,11 @@ namespace D2G.Iris.ML.Training
             var metrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
             Console.WriteLine(metrics.ConfusionMatrix.GetFormattedConfusionTable());
             ConsoleHelper.PrintMultiClassClassificationMetrics(config.TrainingParameters.Algorithm, metrics);
-
-            
+           
             var modelPath = $"MulticlassClassification_{config.TrainingParameters.Algorithm}_Model.zip";
             mlContext.Model.Save(trainedModel, dataView.Schema, modelPath);
             Console.WriteLine($"Model saved to {modelPath}");
-
-            
+         
             await ModelHelper.CreateModelInfo<MulticlassClassificationMetrics, float>(
                 metrics,
                 dataView,

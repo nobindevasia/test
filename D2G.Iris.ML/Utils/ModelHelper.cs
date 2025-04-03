@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -21,40 +20,9 @@ namespace D2G.Iris.ML.Utils
             ProcessedData processedData)
         {
             try
-            {             
-                var modelInfo = new Dictionary<string, object>
-                {
-                    ["ModelName"] = $"{config.ModelType}_{config.TrainingParameters.Algorithm}",
-                    ["Author"] = config.Author,
-                    ["Description"] = config.Description,
-                    ["CreatedDate"] = DateTime.Now,
-                    ["ModelType"] = config.ModelType.ToString(),
-                    ["Algorithm"] = config.TrainingParameters.Algorithm,
-                    ["AlgorithmParameters"] = config.TrainingParameters.AlgorithmParameters,
-                    ["Features"] = featureNames,
-                    ["Metrics"] = metrics,
-                    ["DataProcessing"] = new Dictionary<string, object>
-                    {
-                        ["OriginalSampleCount"] = processedData?.OriginalSampleCount ?? 0,
-                        ["BalancedSampleCount"] = processedData?.BalancedSampleCount ?? 0,
-                        ["FeatureSelectionMethod"] = processedData?.FeatureSelectionMethod.ToString() ?? "None",
-                        ["DataBalancingMethod"] = processedData?.DataBalancingMethod.ToString() ?? "None",
-                        ["FeatureSelectionReport"] = processedData?.FeatureSelectionReport ?? string.Empty
-                    }
-                };
-
-                var jsonOptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
-
-                var infoPath = $"{config.ModelType}_{config.TrainingParameters.Algorithm}_ModelInfo.json";
-                await File.WriteAllTextAsync(infoPath, JsonSerializer.Serialize(modelInfo, jsonOptions));
-
-                Console.WriteLine($"Model info saved to {infoPath}");
-        
+            {
                 CreateModelInfoTxtFile(
-                    null, 
+                    null,
                     new GeneralInfo
                     {
                         AuthorName = config.Author,
@@ -71,6 +39,8 @@ namespace D2G.Iris.ML.Utils
                     ConvertToStandardizedMetrics(metrics, config.ModelType),
                     config,
                     processedData);
+
+                await Task.CompletedTask;
             }
             catch (Exception ex)
             {
@@ -142,15 +112,16 @@ namespace D2G.Iris.ML.Utils
                 path = Directory.GetCurrentDirectory();
             }
 
-            using (StreamWriter writer = new StreamWriter(path + "\\ModelInfo.txt"))
+            var filename = $"{config.ModelType}_{config.TrainingParameters.Algorithm}_ModelInfo.txt";
+            using (StreamWriter writer = new StreamWriter(Path.Combine(path, filename)))
             {
                 writer.WriteLine($"*********** MODEL INFORMATION ***********\n");
                 writer.WriteLine($"Author name: {generalInfo.AuthorName}");
                 writer.WriteLine($"Short description: {generalInfo.Description}\n");
                 writer.WriteLine("-------------------------------------------------------");
                 writer.WriteLine("Information about training-data:\n");
-                writer.WriteLine($"Used Trainer/Algorithmn: {trainingInfo.TrainerName}");
-                writer.WriteLine("Dimensons:");
+                writer.WriteLine($"Used Trainer/Algorithm: {trainingInfo.TrainerName}");
+                writer.WriteLine("Dimensions:");
                 writer.WriteLine($"Number of columns: {trainingInfo.NumberColumns}");
                 writer.WriteLine($"Number of rows: {trainingInfo.NumberRows}\n");
                 writer.WriteLine("Input column data information:");
@@ -208,7 +179,7 @@ namespace D2G.Iris.ML.Utils
                 writer.WriteLine(metricsInfo.CreateStandardizedMetricsMsg());
             }
 
-            Console.WriteLine($"Detailed model info saved to {path}\\ModelInfo.txt");
+            Console.WriteLine($"Model info saved to {Path.Combine(path, filename)}");
         }
     }
 }
