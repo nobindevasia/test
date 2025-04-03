@@ -22,6 +22,7 @@ namespace D2G.Iris.ML
             {
                 Console.WriteLine("Starting...");
                 string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modelconfig.json");
+
                 var configManager = new ConfigManager();
                 var config = configManager.LoadConfiguration(configPath);
 

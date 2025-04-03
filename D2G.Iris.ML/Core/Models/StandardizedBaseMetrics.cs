@@ -36,6 +36,9 @@ namespace D2G.Iris.ML.Core.Models
         public double PositivePrecision { get; set; }
         public double PositiveRecall { get; set; }
         public double F1Score { get; set; }
+        public double AreaUnderPrecisionRecallCurve { get; set; }
+       
+
 
         public override string CreateStandardizedMetricsMsg()
         {
@@ -44,7 +47,8 @@ namespace D2G.Iris.ML.Core.Models
                    $"AUC: {AreaUnderRocCurve:F4}\n" +
                    $"Precision: {PositivePrecision:F4}\n" +
                    $"Recall: {PositiveRecall:F4}\n" +
-                   $"F1 Score: {F1Score:F4}";
+                   $"F1 Score: {F1Score:F4}\n"+
+                   $"Area Under Precision-Recall Curve: {AreaUnderPrecisionRecallCurve:F4}";    
         }
     }
 

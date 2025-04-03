@@ -17,6 +17,7 @@ namespace D2G.Iris.ML.Utils
             Console.WriteLine($"*    F1 Score:          {metrics.F1Score:P2}");
             Console.WriteLine($"*    Negative Precision:{metrics.NegativePrecision:P2}");
             Console.WriteLine($"*    Negative Recall:   {metrics.NegativeRecall:P2}");
+            Console.WriteLine($"*    AreaUnderPrecisionRecallCurve: {metrics.AreaUnderPrecisionRecallCurve:P2}");
             Console.WriteLine($"************************************************************");
         }
 
@@ -29,6 +30,7 @@ namespace D2G.Iris.ML.Utils
             Console.WriteLine($"*    Micro Accuracy:    {metrics.MicroAccuracy:P2}");
             Console.WriteLine($"*    Log Loss:          {metrics.LogLoss:0.###}");
             Console.WriteLine($"*    Log Loss Reduction:{metrics.LogLossReduction:0.###}");
+            Console.WriteLine($"*    Top K Accuracy:    {metrics.TopKAccuracy:0.###}");
             Console.WriteLine($"************************************************************");
         }
 

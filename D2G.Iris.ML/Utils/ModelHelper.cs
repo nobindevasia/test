@@ -38,7 +38,8 @@ namespace D2G.Iris.ML.Utils
                     },
                     ConvertToStandardizedMetrics(metrics, config.ModelType),
                     config,
-                    processedData);
+                    processedData,
+                    metrics); 
 
                 await Task.CompletedTask;
             }
@@ -66,7 +67,8 @@ namespace D2G.Iris.ML.Utils
                             AreaUnderRocCurve = binaryMetrics.AreaUnderRocCurve,
                             PositivePrecision = binaryMetrics.PositivePrecision,
                             PositiveRecall = binaryMetrics.PositiveRecall,
-                            F1Score = binaryMetrics.F1Score
+                            F1Score = binaryMetrics.F1Score,
+                            AreaUnderPrecisionRecallCurve = binaryMetrics.AreaUnderPrecisionRecallCurve
                         };
                     }
                     break;
@@ -105,7 +107,8 @@ namespace D2G.Iris.ML.Utils
             TrainingInfo trainingInfo,
             IStandardizedBaseMetrics metricsInfo,
             ModelConfig config,
-            ProcessedData processedData)
+            ProcessedData processedData,
+            object originalMetrics) 
         {
             if (path == null)
             {
@@ -177,6 +180,21 @@ namespace D2G.Iris.ML.Utils
 
                 writer.WriteLine("\n-------------------------------------------------------");
                 writer.WriteLine(metricsInfo.CreateStandardizedMetricsMsg());
+
+               
+                if (originalMetrics is BinaryClassificationMetrics binaryMetrics)
+                {
+                    writer.WriteLine("\n-------------------------------------------------------");
+                    writer.WriteLine("Confusion Matrix:");
+                    writer.WriteLine(binaryMetrics.ConfusionMatrix.GetFormattedConfusionTable());
+                }
+            
+                else if (originalMetrics is MulticlassClassificationMetrics multiClassMetrics)
+                {
+                    writer.WriteLine("\n-------------------------------------------------------");
+                    writer.WriteLine("Confusion Matrix:");
+                    writer.WriteLine(multiClassMetrics.ConfusionMatrix.GetFormattedConfusionTable());
+                }
             }
 
             Console.WriteLine($"Model info saved to {Path.Combine(path, filename)}");
