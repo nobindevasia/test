@@ -47,7 +47,7 @@ namespace D2G.Iris.ML.Training
             var trainingPipeline = pipeline.Append(trainer);
 
             var splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: config.TrainingParameters.TestFraction);
-            Console.WriteLine($"Starting regression model training using {config.TrainingParameters.Algorithm}...");
+            Console.WriteLine($"\n Starting regression model training using {config.TrainingParameters.Algorithm}...");
 
             var trainedModel = await Task.Run(() => trainingPipeline.Fit(splitData.TrainSet));
 

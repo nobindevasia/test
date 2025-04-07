@@ -69,7 +69,6 @@ namespace D2G.Iris.ML.Data
             return results;
         }
 
-
         private void ValidateLoadedData(List<Dictionary<string, object>> data, ModelType modelType)
         {
             if (!data.Any())

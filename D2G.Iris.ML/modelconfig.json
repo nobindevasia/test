@@ -8,7 +8,7 @@
     "database": {
       "server": "sim-01-02",
       "database": "sql-iris-dev",
-      "whereClause": "",
+      "whereClause": "ReportDateTime > '2023-03-09'",
       "tableName": "ComputeData.MessageProb256_Ag408_dummy",
       "outputTableName": "ComputeData.MessageProb256_Ag408_dummy_pr"
     },
@@ -31,7 +31,7 @@
     },
 
     "trainingParameters": {
-      "algorithm": "fastforest",
+      "algorithm": "fasttree",
       "algorithmParameters": {
         
       },

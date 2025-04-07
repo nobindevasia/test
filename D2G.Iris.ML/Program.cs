@@ -43,7 +43,6 @@ namespace D2G.Iris.ML
                     config.TargetField,
                     config.Database.WhereClause).ToList();
 
-                Console.WriteLine($"Original dataset size: {rawData.Count} samples");
                 var mlContext = new MLContext(seed: 42);
 
                 var dataProcessor = new DataProcessor();
@@ -53,8 +52,7 @@ namespace D2G.Iris.ML
                     enabledFields,
                     config,
                     sqlHandler);
-
-               
+        
                 var modelTrainerFactory = new ModelTrainerFactory(mlContext);
                 var modelTrainer = modelTrainerFactory.CreateTrainer(config.ModelType);
 

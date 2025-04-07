@@ -39,7 +39,7 @@ namespace D2G.Iris.ML.Utils
             Console.WriteLine($"************************************************************");
             Console.WriteLine($"*    Model quality metrics evaluation for {name}");
             Console.WriteLine($"*-----------------------------------------------------------");
-            Console.WriteLine($"*    R2 Score:          {metrics.RSquared:0.###}");
+            Console.WriteLine($"*    R² Score:          {metrics.RSquared:0.###}");
             Console.WriteLine($"*    Mean Squared Error:{metrics.MeanSquaredError:0.###}");
             Console.WriteLine($"*    Mean Absolute Error:{metrics.MeanAbsoluteError:0.###}");
             Console.WriteLine($"*    Root Mean Squared Error: {metrics.RootMeanSquaredError:0.###}");

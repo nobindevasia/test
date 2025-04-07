@@ -18,7 +18,5 @@ namespace D2G.Iris.ML.DataBalancing
                 _ => throw new ArgumentException($"Unsupported data balance method: {method}")
             };
         }
-    }
-
-    
+    }   
 }

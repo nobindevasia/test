@@ -51,7 +51,7 @@ namespace D2G.Iris.ML.Training
                                  .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
 
             var splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: config.TrainingParameters.TestFraction);
-            Console.WriteLine($"Starting multiclass classification model training using {config.TrainingParameters.Algorithm}...");
+            Console.WriteLine($"\n Starting multiclass classification model training using {config.TrainingParameters.Algorithm}...");
 
             var trainedModel = await Task.Run(() => trainingPipeline.Fit(splitData.TrainSet));
  

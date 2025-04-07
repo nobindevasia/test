@@ -48,7 +48,7 @@ namespace D2G.Iris.ML.Training
                 .Append(mlContext.Transforms.CopyColumns("Probability", "Score"));
 
             var splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: config.TrainingParameters.TestFraction);
-            Console.WriteLine($"Starting binary classification model training using {config.TrainingParameters.Algorithm}...");
+            Console.WriteLine($"\nStarting binary classification model training using {config.TrainingParameters.Algorithm}...");
 
             // Train 
             var trainedModel = await Task.Run(() => trainingPipeline.Fit(splitData.TrainSet));

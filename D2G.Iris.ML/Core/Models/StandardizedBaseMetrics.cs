@@ -37,7 +37,8 @@ namespace D2G.Iris.ML.Core.Models
         public double PositiveRecall { get; set; }
         public double F1Score { get; set; }
         public double AreaUnderPrecisionRecallCurve { get; set; }
-       
+
+
 
 
         public override string CreateStandardizedMetricsMsg()

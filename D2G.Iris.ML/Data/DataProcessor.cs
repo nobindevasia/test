@@ -20,7 +20,7 @@ namespace D2G.Iris.ML.Data
             ModelConfig config,
             ISqlHandler sqlHandler)
         {
-            Console.WriteLine("\n=============== Processing Data ==============");
+            Console.WriteLine("\n=============== Processing Data ===============");
  
             bool balancingFirst = config.DataBalancing.ExecutionOrder <= config.FeatureEngineering.ExecutionOrder;
 

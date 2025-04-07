@@ -74,6 +74,7 @@ namespace D2G.Iris.ML.Training
                 "lbfgslogisticregression" => CreateTrainer(_mlContext.BinaryClassification.Trainers.LbfgsLogisticRegression,
                     new LbfgsLogisticRegressionBinaryTrainer.Options(), parameters),
 
+
                 _ => throw new ArgumentException($"Unsupported binary classification algorithm: {algorithm}")
             };
         }

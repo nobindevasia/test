@@ -78,6 +78,7 @@ namespace D2G.Iris.ML.Data
                     try
                     {
                         command.ExecuteNonQuery();
+                        Console.WriteLine("\n");
                         Console.WriteLine($"Table {tableName} dropped and recreated successfully");
                     }
                     catch (SqlException ex)
