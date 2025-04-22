@@ -50,7 +50,7 @@ namespace D2G.Iris.ML.Training
                 "averagedperceptron" => CreateTrainer(_mlContext.BinaryClassification.Trainers.AveragedPerceptron,
                     new AveragedPerceptronTrainer.Options(), parameters),
 
-                "linearSvm" => CreateTrainer(_mlContext.BinaryClassification.Trainers.LinearSvm,
+               "linearSvm" => CreateTrainer (_mlContext.BinaryClassification.Trainers.LinearSvm,
                     new LinearSvmTrainer.Options(), parameters),
 
                 "ldsvm" => CreateTrainer(_mlContext.BinaryClassification.Trainers.LdSvm,
@@ -110,7 +110,6 @@ namespace D2G.Iris.ML.Training
 
                 "lbfgsmaximumentropy" => CreateTrainer(_mlContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy,
                                 new LbfgsMaximumEntropyMulticlassTrainer.Options(), parameters),
-
                 _ => throw new ArgumentException($"Unsupported multiclass classification algorithm: {algorithm}")
             };
         }
@@ -145,7 +144,6 @@ namespace D2G.Iris.ML.Training
 
                 "lbfgspoissonregression" => CreateTrainer(_mlContext.Regression.Trainers.LbfgsPoissonRegression,
                     new LbfgsPoissonRegressionTrainer.Options(), parameters),
-
                 _ => throw new ArgumentException($"Unsupported regression algorithm: {algorithm}")
             };
         }

@@ -73,7 +73,7 @@ namespace D2G.Iris.ML.Training
 
             return trainedModel;
         }
-
+        
         private class MulticlassRow
         {
             [VectorType]

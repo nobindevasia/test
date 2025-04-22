@@ -15,6 +15,7 @@ namespace D2G.Iris.ML.DataBalancing
                 DataBalanceMethod.None => new NoDataBalancer(),
                 DataBalanceMethod.SMOTE => new SmoteDataBalancer(),
                 DataBalanceMethod.ADASYN => new AdasynDataBalancer(),
+
                 _ => throw new ArgumentException($"Unsupported data balance method: {method}")
             };
         }

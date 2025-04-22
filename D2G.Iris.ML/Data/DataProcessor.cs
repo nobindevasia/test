@@ -168,6 +168,7 @@ namespace D2G.Iris.ML.Data
                         config.TargetField,
                         config.ModelType);
                     Console.WriteLine($"Processed data saved to table: {config.Database.OutputTableName}");
+
                 }
                 catch (Exception ex)
                 {

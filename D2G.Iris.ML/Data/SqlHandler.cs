@@ -6,6 +6,7 @@ using System.Linq;
 using D2G.Iris.ML.Core.Enums;
 using D2G.Iris.ML.Core.Interfaces;
 using D2G.Iris.ML.Core.Models;
+using Microsoft.Identity.Client;
 
 namespace D2G.Iris.ML.Data
 {
@@ -45,6 +46,7 @@ namespace D2G.Iris.ML.Data
             string[] featureNames,
             string targetField,
             ModelType modelType)
+            
         {
             var finalFeatureNames = featureNames.Where(f => f != targetField).ToArray();
 
@@ -109,7 +111,7 @@ namespace D2G.Iris.ML.Data
                         _ => typeof(float)
                     };
                     dataTable.Columns.Add(targetField, targetColumnClrType);
-
+                    
                     foreach (var row in processedData)
                     {
                         var dataRow = dataTable.NewRow();
