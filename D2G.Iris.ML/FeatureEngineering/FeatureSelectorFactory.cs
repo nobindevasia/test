@@ -21,8 +21,6 @@ namespace D2G.Iris.ML.FeatureEngineering
             {
                 FeatureSelectionMethod.None => new NoFeatureSelector(_mlContext),
                 FeatureSelectionMethod.Correlation => new CorrelationFeatureSelector(_mlContext),
-                FeatureSelectionMethod.PCA => new PCAFeatureSelector(_mlContext),
-                FeatureSelectionMethod.Forward => new ForwardFeatureSelector(_mlContext),
                 _ => throw new ArgumentException($"Unsupported feature selection method: {method}")
             };
         }
